@@ -1,0 +1,20 @@
+{
+  "name": "spritzer",
+  "version": "0.0.0",
+  "description": "A simple image spriter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dawnerd/node-spritzer.git"
+  },
+  "keywords": [
+    "image",
+    "spriter",
+    "spitesheet"
+  ],
+  "author": "Troy Whiteley",
+  "license": "MIT"
+}
