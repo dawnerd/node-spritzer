@@ -50,8 +50,59 @@
       output_sprite: path.normalize([this.options.output_dir, item.name].join('/') + '.png')
     };
 
-    console.log(sprite);
-    done();
+    var images = {
+      normal: [],
+      retina: []
+    }
+
+    async.each(item.images, function(image, cb) {
+      async.parallel([
+        // Normal images
+        function(callback) {
+          if(!image.src) {
+            console.error('Skipping empty image'.yellow);
+            callback();
+            return;
+          }
+
+          ImageMagick.identify(image.src, function(image_meta) {
+            image_meta.selector = image.selector;
+            images.normal.push(image_meta);
+            callback();
+          });
+        },
+
+        // Retina images
+        function(callback) {
+          if(!item.allowRetina) {
+            callback();
+            return;
+          }
+
+          if(!image.srcRetina) {
+            console.error('Skipping empty image'.yellow);
+            callback();
+            return;
+          }
+
+          ImageMagick.identify(image.srcRetina, function(image_meta) {
+            image_meta.selector = image.selector;
+            images.retina.push(image_meta);
+            callback();
+          });
+        },
+      ],
+      function() {
+        
+        
+        cb();
+      });
+    }, function() {
+      done();
+    });
+
+    //console.log(sprite);
+    //done();
   };
 
   module.exports = Spritzer;

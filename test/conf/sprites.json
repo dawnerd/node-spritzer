@@ -45,7 +45,7 @@
       },
       {
         "src": "./test/source_images/9.png",
-        "srcRetina": "./test/source_images/@2x.png",
+        "srcRetina": "./test/source_images/9@2x.png",
         "selector": ".icon.icon5"
       },
       {
@@ -101,7 +101,7 @@
       },
       {
         "src": "./test/source_images/9.png",
-        "srcRetina": "./test/source_images/@2x.png",
+        "srcRetina": "./test/source_images/9@2x.png",
         "selector": ".icon.icon5"
       },
       {
@@ -157,7 +157,7 @@
       },
       {
         "src": "./test/source_images/9.png",
-        "srcRetina": "./test/source_images/@2x.png",
+        "srcRetina": "./test/source_images/9@2x.png",
         "selector": ".icon.icon5"
       },
       {
