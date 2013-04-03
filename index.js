@@ -3,7 +3,7 @@
  * A simple image spriter for nodejs
  * 
  * @author Troy Whiteley (@dawnerd)
- * @version 0.0.0
+ * @version 0.1.0
  * @license MIT
  * @url https://github.com/dawnerd/node-spritzer
  *
