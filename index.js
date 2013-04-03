@@ -45,9 +45,12 @@
    * @param  {Function} done Callback that has to be called once everything is done.
    */
   Spritzer.prototype.generateSprite = function(item, done) {
+    var self = this;
+
     var sprite = {
       output_css: path.normalize([this.options.output_dir, item.name].join('/') + '.css'),
-      output_sprite: path.normalize([this.options.output_dir, item.name].join('/') + '.png')
+      normal: path.normalize([this.options.output_dir, item.name].join('/') + '.png'),
+      retina: path.normalize([this.options.output_dir, item.name].join('/') + '@2x.png')
     };
 
     var images = {
@@ -67,6 +70,8 @@
 
           ImageMagick.identify(image.src, function(image_meta) {
             image_meta.selector = image.selector;
+            image_meta.w = image_meta.width;
+            image_meta.h = image_meta.height;
             images.normal.push(image_meta);
             callback();
           });
@@ -87,22 +92,71 @@
 
           ImageMagick.identify(image.srcRetina, function(image_meta) {
             image_meta.selector = image.selector;
+            image_meta.w = image_meta.width;
+            image_meta.h = image_meta.height;
             images.retina.push(image_meta);
             callback();
           });
         },
       ],
       function() {
-        
-        
         cb();
       });
     }, function() {
+      images.normal.sort(Bind(self.sort, self));
+      images.retina.sort(Bind(self.sort, self));
+
+      var normal_pack = Package.fit(images.normal);
+      var retina_pack = Package.fit(images.retina);
+
+      // Non retina
+      ImageMagick.composite({
+        images: images.normal,
+        filepath: sprite.normal,
+        width: normal_pack.w,
+        height: normal_pack.h
+      });
+
+      if(item.allowRetina) {
+        // Retina
+        ImageMagick.composite({
+          images: images.retina,
+          filepath: sprite.retina,
+          width: retina_pack.w,
+          height: retina_pack.h
+        });
+      }
+
+
       done();
     });
 
     //console.log(sprite);
     //done();
+  };
+
+  Spritzer.prototype.sort = function(a, b) {
+    var diff = this.compare(Math.max(b.width, b.height), Math.max(a.width, a.height));
+    if (diff === 0) {
+      diff = this.compare(Math.min(b.width, b.height), Math.min(a.width, a.height));
+    }
+    if (diff === 0) {
+      diff = this.compare(b.height, a.height);
+    }
+    if (diff === 0) {
+      diff = this.compare(b.width, a.width);
+    }
+    return diff;
+  };
+
+  Spritzer.prototype.compare = function(a, b) {
+    if (a > b) {
+      return 1;
+    }
+    if (b > a) {
+      return -1;
+    }
+    return 0;
   };
 
   module.exports = Spritzer;
