@@ -14,6 +14,7 @@
   var colors = require('colors');
   var async = require('async');
   var path = require('path');
+  var fs = require('fs');
   var Packer = require('./lib/packer');
   var ImageMagick = require('./lib/ImageMagick');
   var Bind = require('./lib/bind');
@@ -34,6 +35,8 @@
       process.exit(1);
     }
 
+    if(!this.options.basePath) this.options.basePath = '';
+
     this.config = require(this.options.config);
 
     async.each(this.config, Bind(this.generateSprite, this));
@@ -48,9 +51,11 @@
     var self = this;
 
     var sprite = {
-      output_css: path.normalize([this.options.output_dir, item.name].join('/') + '.css'),
-      normal: path.normalize([this.options.output_dir, item.name].join('/') + '.png'),
-      retina: path.normalize([this.options.output_dir, item.name].join('/') + '@2x.png')
+      output_css: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '.css'),
+      normal: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '.png'),
+      normal_css: path.normalize([this.options.output_dir, item.name].join('/') + '.png'),
+      retina: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '@2x.png'),
+      retina_css: path.normalize([this.options.output_dir, item.name].join('/') + '@2x.png')
     };
 
     var images = {
@@ -127,12 +132,63 @@
         });
       }
 
+      var css = self.generateStyles({
+        images: images,
+        sprite: sprite,
+        normal_pack: normal_pack,
+        retina_pack: retina_pack
+      });
 
-      done();
+      fs.writeFile(sprite.output_css, css, function (err) {
+        if (err) {
+          console.error(err.bold.red);
+        } else {
+          console.log('Generated: '.bold.green, sprite.output_css.green);
+        }
+        done();
+      });
     });
 
     //console.log(sprite);
     //done();
+  };
+
+  /**
+   * Generates css for each sprite
+   */
+  Spritzer.prototype.generateStyles = function(options) {
+    var images = options.images;
+    var sprite = options.sprite;
+    var normal = options.normal_pack;
+    var retina = options.retina_pack;
+
+    var output = [];
+
+    for(var i = 0, c = images.normal.length, image; i < c; i++) {
+      image = images.normal[i];
+
+      output.push(image.selector + " {");
+      output.push("  background-image: url(" + sprite.normal_css + ");");
+      output.push("  background-size: " + normal.w + "px " + normal.h + "px;");
+      output.push("  background-position: " + image.fit.x + "px " + image.fit.y + "px;");
+      output.push("}");
+    }
+
+    if(images.retina.length) {
+      output.push("@media (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {");
+      for(var i = 0, c = images.retina.length, image; i < c; i++) {
+        image = images.retina[i];
+
+        output.push("  " + image.selector + " {");
+        output.push("    background-image: url(" + sprite.normal_css + ");");
+        output.push("    background-size: " + normal.w / 2 + "px " + normal.h / 2 + "px;");
+        output.push("    background-position: " + image.fit.x / 2 + "px " + image.fit.y / 2 + "px;");
+        output.push("  }");
+      }
+      output.push("}");
+    }
+
+    return output.join("\n");
   };
 
   /**
