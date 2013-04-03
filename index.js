@@ -135,6 +135,9 @@
     //done();
   };
 
+  /**
+   * Sorts images based on both height and width.
+   */
   Spritzer.prototype.sort = function(a, b) {
     var diff = this.compare(Math.max(b.width, b.height), Math.max(a.width, a.height));
     if (diff === 0) {
@@ -149,6 +152,9 @@
     return diff;
   };
 
+  /**
+   * Basic compare. Port of Array.sort()
+   */
   Spritzer.prototype.compare = function(a, b) {
     if (a > b) {
       return 1;
