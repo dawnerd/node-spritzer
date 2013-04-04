@@ -114,12 +114,14 @@
       var normal_pack = Package.fit(images.normal);
       var retina_pack = Package.fit(images.retina);
 
+      console.log(images.normal[images.normal.length-1]);
+
       // Non retina
       ImageMagick.composite({
         images: images.normal,
         filepath: sprite.normal,
-        width: normal_pack.w,
-        height: normal_pack.h
+        width: normal_pack.width,
+        height: normal_pack.height
       });
 
       if(item.allowRetina) {
@@ -127,8 +129,8 @@
         ImageMagick.composite({
           images: images.retina,
           filepath: sprite.retina,
-          width: retina_pack.w,
-          height: retina_pack.h
+          width: retina_pack.width,
+          height: retina_pack.height
         });
       }
 
@@ -141,7 +143,7 @@
 
       fs.writeFile(sprite.output_css, css, function (err) {
         if (err) {
-          console.error(err.bold.red);
+          console.error(err + "".bold.red);
         } else {
           console.log('Generated: '.bold.green, sprite.output_css.green);
         }
@@ -169,8 +171,10 @@
 
       output.push(image.selector + " {");
       output.push("  background-image: url(" + sprite.normal_css + ");");
-      output.push("  background-size: " + normal.w + "px " + normal.h + "px;");
-      output.push("  background-position: " + image.fit.x + "px " + image.fit.y + "px;");
+      output.push("  background-size: " + normal.width + "px " + normal.height + "px;");
+      output.push("  background-position: " + image.x * -1 + "px " + image.y * -1 + "px;");
+      output.push("  height: " + image.h + "px;");
+      output.push("  width: " + image.w + "px;");
       output.push("}");
     }
 
@@ -180,9 +184,11 @@
         image = images.retina[i];
 
         output.push("  " + image.selector + " {");
-        output.push("    background-image: url(" + sprite.normal_css + ");");
-        output.push("    background-size: " + normal.w / 2 + "px " + normal.h / 2 + "px;");
-        output.push("    background-position: " + image.fit.x / 2 + "px " + image.fit.y / 2 + "px;");
+        output.push("    background-image: url(" + sprite.retina_css + ");");
+        output.push("    background-size: " + normal.width * -1 / 2 + "px " + normal.height *-1 / 2 + "px;");
+        output.push("    background-position: " + image.x / 2 + "px " + image.y / 2 + "px;");
+        output.push("    height: " + image.height / 2 + "px;");
+        output.push("    width: " + image.width / 2 + "px;");
         output.push("  }");
       }
       output.push("}");
