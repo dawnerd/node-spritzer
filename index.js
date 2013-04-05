@@ -3,7 +3,7 @@
  * A simple image spriter for nodejs
  * 
  * @author Troy Whiteley (@dawnerd)
- * @version 0.4.0
+ * @version 0.4.1
  * @license MIT
  * @url https://github.com/dawnerd/node-spritzer
  *
@@ -116,8 +116,6 @@
       var normal_pack = Package.fit(images.normal);
       var retina_pack = Package.fit(images.retina);
 
-      console.log(images.normal[images.normal.length-1]);
-
       // Non retina
       ImageMagick.composite({
         images: images.normal,
@@ -153,8 +151,6 @@
       });
     });
 
-    //console.log(sprite);
-    //done();
   };
 
   /**
