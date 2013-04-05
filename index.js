@@ -3,7 +3,7 @@
  * A simple image spriter for nodejs
  * 
  * @author Troy Whiteley (@dawnerd)
- * @version 0.1.0
+ * @version 0.4.0
  * @license MIT
  * @url https://github.com/dawnerd/node-spritzer
  *
@@ -50,12 +50,14 @@
   Spritzer.prototype.generateSprite = function(item, done) {
     var self = this;
 
+    var rand = +new Date();
+
     var sprite = {
       output_css: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '.css'),
-      normal: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '.png'),
-      normal_css: path.normalize([this.options.output_dir, item.name].join('/') + '.png'),
-      retina: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '@2x.png'),
-      retina_css: path.normalize([this.options.output_dir, item.name].join('/') + '@2x.png')
+      normal: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + rand + '.png'),
+      normal_css: path.normalize([this.options.output_dir, item.name].join('/') + rand +  '.png'),
+      retina: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + rand + '@2x.png'),
+      retina_css: path.normalize([this.options.output_dir, item.name].join('/') + rand + '@2x.png')
     };
 
     var images = {
