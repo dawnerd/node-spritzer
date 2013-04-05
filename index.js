@@ -26,7 +26,7 @@
    * Spriter class
    * @param {Object} options Options
    */
-  var Spritzer = function(options) {
+  var Spritzer = function(options, finished) {
     this.options = options || {};
 
     // Load json config
@@ -39,7 +39,7 @@
 
     this.config = require(this.options.config);
 
-    async.each(this.config, Bind(this.generateSprite, this));
+    async.each(this.config, Bind(this.generateSprite, this), finished);
   };
 
   /**
