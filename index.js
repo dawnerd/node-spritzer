@@ -3,7 +3,7 @@
  * A simple image spriter for nodejs
  * 
  * @author Troy Whiteley (@dawnerd)
- * @version 0.4.1
+ * @version 0.4.2
  * @license MIT
  * @url https://github.com/dawnerd/node-spritzer
  *
@@ -16,7 +16,7 @@
   var path = require('path');
   var fs = require('fs');
   var Packer = require('./lib/packer');
-  var ImageMagick = require('./lib/ImageMagick');
+  var ImageMagick = require('./lib/imagemagick');
   var Bind = require('./lib/bind');
 
   // Get packer ready
