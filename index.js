@@ -168,6 +168,7 @@
       image = images.normal[i];
 
       output.push(image.selector + " {");
+      output.push("  display: inline-block;");
       output.push("  background-image: url(" + sprite.normal_css + ");");
       output.push("  background-size: " + normal.width + "px " + normal.height + "px;");
       output.push("  background-position: " + image.x * -1 + "px " + image.y * -1 + "px;");
