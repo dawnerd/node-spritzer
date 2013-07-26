@@ -185,7 +185,7 @@
         output.push("  " + image.selector + " {");
         output.push("    background-image: url(" + sprite.retina_css + ");");
         output.push("    background-size: " + normal.width + "px " + normal.height + "px;");
-        output.push("    background-position: " + image.x / 2 + "px " + image.y / 2 + "px;");
+        output.push("    background-position: " + image.x / -2 + "px " + image.y / -2 + "px;");
         output.push("    height: " + image.height / 2 + "px;");
         output.push("    width: " + image.width / 2 + "px;");
         output.push("  }");

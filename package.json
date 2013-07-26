@@ -1,6 +1,6 @@
 {
   "name": "spritzer",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "A simple image spriter",
   "main": "index.js",
   "scripts": {
