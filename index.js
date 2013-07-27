@@ -18,6 +18,7 @@
   var Packer = require('./lib/packer');
   var ImageMagick = require('./lib/imagemagick');
   var Bind = require('./lib/bind');
+  var mkdirp = require('mkdirp');
 
   // Get packer ready
   var Package = new Packer();
@@ -52,18 +53,23 @@
 
     var rand = +new Date();
 
+    var output = this.options.basePath + '/' + this.options.output_dir;
+    mkdirp(output);
+
+
+
     var sprite = {
-      output_css: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + '.css'),
-      normal: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + rand + '.png'),
-      normal_css: path.normalize([this.options.output_dir, item.name].join('/') + rand +  '.png'),
-      retina: path.normalize([this.options.basePath, this.options.output_dir, item.name].join('/') + rand + '@2x.png'),
-      retina_css: path.normalize([this.options.output_dir, item.name].join('/') + rand + '@2x.png')
+      output_css: path.normalize([output, item.name].join('/') + '.css'), //css file
+      normal: path.normalize([output, item.name].join('/') + rand + '.png'), //sprite normal
+      normal_css: path.normalize([this.options.output_dir, item.name].join('/') + rand +  '.png'), //used in css
+      retina: path.normalize([output, item.name].join('/') + rand + '@2x.png'), //sprite retina
+      retina_css: path.normalize([this.options.output_dir, item.name].join('/') + rand + '@2x.png') //used in css
     };
 
     var images = {
       normal: [],
       retina: []
-    }
+    };
 
     async.each(item.images, function(image, cb) {
       async.parallel([

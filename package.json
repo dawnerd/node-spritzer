@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "colors": "~0.6.0-1",
-    "async": "~0.2.6"
+    "async": "~0.2.6",
+    "mkdirp": "~0.3.5"
   }
 }
