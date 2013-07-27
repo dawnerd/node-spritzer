@@ -2,4 +2,3 @@
 node_modules/
 test/output/*
 npm-debug.log
-test/source_images/*
